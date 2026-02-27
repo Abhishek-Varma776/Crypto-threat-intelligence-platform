@@ -9,7 +9,7 @@
     "start": "next start"
   },
   "dependencies": {
-    "@supabase/ssr": "^0.5.4",
+    "@supabase/ssr": "^0.8.0",
     "@supabase/supabase-js": "^2.45.4",
     "@hookform/resolvers": "^3.10.0",
     "@radix-ui/react-accordion": "1.2.2",
