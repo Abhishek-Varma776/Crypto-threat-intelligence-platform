@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 import { createClient } from "@/lib/supabase/client"
 
 const navigation = [
-  { name: "Dashboard", href: "/", icon: LayoutDashboard },
+  { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
   { name: "Latest", href: "/wallets", icon: Radio },
   { name: "High Risk", href: "/high-risk", icon: AlertTriangle },
   { name: "Alerts", href: "/alerts", icon: Bell },
