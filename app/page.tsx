@@ -1,6 +1,8 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
+import { createClient } from "@/lib/supabase/client"
 import { Sidebar } from "@/components/sidebar"
 import { TopBar } from "@/components/top-bar"
 import { DemoControl } from "@/components/demo-control"
@@ -26,6 +28,9 @@ import {
 } from "@/lib/store"
 
 export default function DashboardPage() {
+  const router = useRouter()
+  const [isAuthorized, setIsAuthorized] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   const [isPresentationMode, setIsPresentationMode] = useState(false)
   const [showOsintModal, setShowOsintModal] = useState(false)
 
@@ -35,6 +40,45 @@ export default function DashboardPage() {
   const [isHydrated, setIsHydrated] = useState(false)
 
   useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const supabase = createClient()
+        const {
+          data: { user },
+        } = await supabase.auth.getUser()
+
+        if (!user) {
+          router.push('/auth/login')
+          return
+        }
+
+        // Check if user is a verified government official
+        const { data: profile } = await supabase
+          .from('government_officials')
+          .select('is_verified')
+          .eq('id', user.id)
+          .single()
+
+        if (!profile?.is_verified) {
+          router.push('/auth/error?error=Unverified')
+          return
+        }
+
+        setIsAuthorized(true)
+      } catch (error) {
+        console.error('Auth check failed:', error)
+        router.push('/auth/login')
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    checkAuth()
+  }, [router])
+
+  useEffect(() => {
+    if (!isAuthorized) return
+
     const storedStats = getStoredStats()
     const storedLastScan = getStoredLastScan()
     const storedIsScanning = getStoredIsScanning()
@@ -43,7 +87,7 @@ export default function DashboardPage() {
     setLastScan(storedLastScan)
     setIsScanning(storedIsScanning)
     setIsHydrated(true)
-  }, [])
+  }, [isAuthorized])
 
   useEffect(() => {
     if (!isHydrated) return
@@ -105,6 +149,17 @@ export default function DashboardPage() {
       setLastScan(now)
       saveLastScan(now)
     }
+  }
+
+  if (isLoading || !isAuthorized) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-background">
+        <div className="text-center">
+          <div className="h-12 w-12 animate-spin rounded-full border-4 border-primary border-t-transparent mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Verifying credentials...</p>
+        </div>
+      </div>
+    )
   }
 
   return (

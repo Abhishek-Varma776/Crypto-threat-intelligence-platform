@@ -12,8 +12,10 @@ interface TopBarProps {
 export function TopBar({ onPresentationToggle, isPresentationMode }: TopBarProps) {
   const [currentTime, setCurrentTime] = useState(new Date())
   const [lastSync, setLastSync] = useState(12)
+  const [isHydrated, setIsHydrated] = useState(false)
 
   useEffect(() => {
+    setIsHydrated(true)
     const timer = setInterval(() => {
       setCurrentTime(new Date())
       setLastSync((prev) => (prev >= 60 ? 0 : prev + 1))
@@ -70,7 +72,9 @@ export function TopBar({ onPresentationToggle, isPresentationMode }: TopBarProps
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2 rounded-lg bg-secondary px-3 py-1.5">
             <Clock className="h-4 w-4 text-primary" />
-            <span className="font-mono text-sm text-foreground">{formatTime(currentTime)}</span>
+            <span className="font-mono text-sm text-foreground">
+              {isHydrated ? formatTime(currentTime) : '00:00:00'}
+            </span>
           </div>
 
           <Button variant="outline" size="sm" className="gap-2 bg-transparent" onClick={onPresentationToggle}>
