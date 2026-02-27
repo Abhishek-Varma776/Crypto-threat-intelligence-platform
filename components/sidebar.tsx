@@ -1,12 +1,14 @@
 "use client"
 
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
-import { LayoutDashboard, AlertTriangle, Bell, Settings, Shield, Activity, FolderOpen, Radio } from "lucide-react"
+import { LayoutDashboard, AlertTriangle, Bell, Settings, Shield, Activity, FolderOpen, Radio, LogOut } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { createClient } from "@/lib/supabase/client"
 
 const navigation = [
-  { name: "Dashboard", href: "/", icon: LayoutDashboard },
+  { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
   { name: "Latest", href: "/wallets", icon: Radio },
   { name: "High Risk", href: "/high-risk", icon: AlertTriangle },
   { name: "Alerts", href: "/alerts", icon: Bell },
@@ -16,6 +18,17 @@ const navigation = [
 
 export function Sidebar() {
   const pathname = usePathname()
+  const router = useRouter()
+
+  const handleLogout = async () => {
+    try {
+      const supabase = createClient()
+      await supabase.auth.signOut()
+      router.push('/auth/login')
+    } catch (error) {
+      console.error('Logout failed:', error)
+    }
+  }
 
   return (
     <aside className="fixed left-0 top-0 z-40 h-screen w-64 border-r border-sidebar-border bg-sidebar">
@@ -60,7 +73,7 @@ export function Sidebar() {
         </nav>
 
         {/* System Status */}
-        <div className="border-t border-sidebar-border p-4">
+        <div className="border-t border-sidebar-border p-4 space-y-3">
           <div className="rounded-lg bg-sidebar-accent p-3">
             <div className="flex items-center gap-2">
               <Activity className="h-4 w-4 text-primary" />
@@ -74,6 +87,15 @@ export function Sidebar() {
               <span className="text-xs text-muted-foreground">All systems operational</span>
             </div>
           </div>
+          <Button
+            variant="outline"
+            size="sm"
+            className="w-full gap-2"
+            onClick={handleLogout}
+          >
+            <LogOut className="h-4 w-4" />
+            Logout
+          </Button>
         </div>
       </div>
     </aside>
