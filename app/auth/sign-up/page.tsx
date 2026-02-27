@@ -5,28 +5,16 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
-const ALLOWED_GOVT_DOMAINS = [
-  'gov.in',
-  'nic.in',
-  'dei.gov.in',
-  'ib.gov.in',
-  'niacin.gov.in',
-  'darpan.gov.in',
-]
-
 export default function Page() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [repeatPassword, setRepeatPassword] = useState('')
-  const [fullName, setFullName] = useState('')
-  const [department, setDepartment] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
 
-  const isGovernmentEmail = (email: string) => {
-    const domain = email.split('@')[1]?.toLowerCase()
-    return domain && ALLOWED_GOVT_DOMAINS.some(d => domain.endsWith(d))
+  const isGmailEmail = (email: string) => {
+    return email.toLowerCase().endsWith('@gmail.com')
   }
 
   const handleSignUp = async (e: React.FormEvent) => {
@@ -35,8 +23,8 @@ export default function Page() {
     setIsLoading(true)
     setError(null)
 
-    if (!isGovernmentEmail(email)) {
-      setError('Only government official email addresses are allowed (e.g., @gov.in, @nic.in)')
+    if (!isGmailEmail(email)) {
+      setError('Only Gmail addresses (@gmail.com) are allowed')
       setIsLoading(false)
       return
     }
@@ -82,10 +70,10 @@ export default function Page() {
       <div className="w-full max-w-sm">
         <div className="rounded-lg border border-border bg-card p-6 shadow-sm">
           <h1 className="text-2xl font-semibold text-card-foreground mb-2">
-            Government Official Registration
+            CACS Registration
           </h1>
           <p className="text-sm text-muted-foreground mb-6">
-            Register with your government email address
+            Create your account with Gmail
           </p>
 
           {error && (
@@ -96,49 +84,19 @@ export default function Page() {
 
           <form onSubmit={handleSignUp} className="space-y-4">
             <div>
-              <label htmlFor="fullName" className="block text-sm font-medium text-card-foreground mb-2">
-                Full Name
-              </label>
-              <input
-                id="fullName"
-                type="text"
-                placeholder="John Doe"
-                required
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
-                className="w-full h-9 rounded-md border border-input bg-transparent px-3 py-1 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-              />
-            </div>
-
-            <div>
-              <label htmlFor="department" className="block text-sm font-medium text-card-foreground mb-2">
-                Department
-              </label>
-              <input
-                id="department"
-                type="text"
-                placeholder="e.g., Ministry of Defense"
-                required
-                value={department}
-                onChange={(e) => setDepartment(e.target.value)}
-                className="w-full h-9 rounded-md border border-input bg-transparent px-3 py-1 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-              />
-            </div>
-
-            <div>
               <label htmlFor="email" className="block text-sm font-medium text-card-foreground mb-2">
-                Government Email
+                Gmail Address
               </label>
               <input
                 id="email"
                 type="email"
-                placeholder="name@gov.in"
+                placeholder="user@gmail.com"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full h-9 rounded-md border border-input bg-transparent px-3 py-1 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
               />
-              <p className="text-xs text-muted-foreground mt-2">Must use an official government domain (@gov.in, @nic.in, etc.)</p>
+              <p className="text-xs text-muted-foreground mt-2">Must use a Gmail address (@gmail.com)</p>
             </div>
 
             <div>

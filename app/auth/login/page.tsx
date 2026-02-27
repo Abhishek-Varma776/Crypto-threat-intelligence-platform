@@ -71,10 +71,10 @@ export default function Page() {
       <div className="w-full max-w-sm">
         <div className="rounded-lg border border-border bg-card p-6 shadow-sm">
           <h1 className="text-2xl font-semibold text-card-foreground mb-2">
-            Government Portal Login
+            CACS
           </h1>
           <p className="text-sm text-muted-foreground mb-6">
-            Sign in with your government official credentials
+            Sign in with your credentials
           </p>
 
           {error && (
@@ -86,12 +86,12 @@ export default function Page() {
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-card-foreground mb-2">
-                Government Email
+                Email
               </label>
               <input
                 id="email"
                 type="email"
-                placeholder="official@gov.in"
+                placeholder="user@gmail.com"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
