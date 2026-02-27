@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { ArrowRight, Shield, Brain, Network, Search, BarChart3, GitBranch, Zap, Lock, Database, TrendingUp, Activity } from 'lucide-react'
 import SimpleNav from '@/components/simple-nav'
+import CACSChatbot from '@/components/cacs-chatbot'
 
 export default function LandingPage() {
   const [scrollY, setScrollY] = useState(0)
@@ -280,6 +281,9 @@ export default function LandingPage() {
           </div>
         </div>
       </footer>
+      
+      {/* AI Chatbot */}
+      <CACSChatbot />
     </div>
   )
 }
