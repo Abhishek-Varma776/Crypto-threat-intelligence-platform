@@ -9,6 +9,8 @@ export default function Page() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [repeatPassword, setRepeatPassword] = useState('')
+  const [fullName, setFullName] = useState('')
+  const [department, setDepartment] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
@@ -48,7 +50,7 @@ export default function Page() {
         options: {
           emailRedirectTo:
             process.env.NEXT_PUBLIC_DEV_SUPABASE_REDIRECT_URL ||
-            `${window.location.origin}/protected`,
+            `${window.location.origin}/auth/callback`,
           data: {
             full_name: fullName,
             department: department,
@@ -83,6 +85,36 @@ export default function Page() {
           )}
 
           <form onSubmit={handleSignUp} className="space-y-4">
+            <div>
+              <label htmlFor="fullName" className="block text-sm font-medium text-card-foreground mb-2">
+                Full Name
+              </label>
+              <input
+                id="fullName"
+                type="text"
+                placeholder="John Doe"
+                required
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+                className="w-full h-9 rounded-md border border-input bg-transparent px-3 py-1 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="department" className="block text-sm font-medium text-card-foreground mb-2">
+                Department
+              </label>
+              <input
+                id="department"
+                type="text"
+                placeholder="e.g., Ministry of Defense"
+                required
+                value={department}
+                onChange={(e) => setDepartment(e.target.value)}
+                className="w-full h-9 rounded-md border border-input bg-transparent px-3 py-1 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+              />
+            </div>
+
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-card-foreground mb-2">
                 Gmail Address
