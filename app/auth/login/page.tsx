@@ -56,7 +56,7 @@ export default function Page() {
       }
       
       console.log('[v0] Login successful, redirecting...')
-      router.push('/')
+      router.push('/dashboard')
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : 'An error occurred'
       console.log('[v0] Login error:', errorMessage)
@@ -71,10 +71,10 @@ export default function Page() {
       <div className="w-full max-w-sm">
         <div className="rounded-lg border border-border bg-card p-6 shadow-sm">
           <h1 className="text-2xl font-semibold text-card-foreground mb-2">
-            CACS
+            CACS Login
           </h1>
           <p className="text-sm text-muted-foreground mb-6">
-            Sign in with your credentials
+            Sign in with your CACS credentials
           </p>
 
           {error && (
